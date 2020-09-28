@@ -1,0 +1,20 @@
+{
+    "objectscript.export.folder": "irisserver/src",
+    "intersystems.servers": {
+        "iot": {
+          "webServer": {
+            "scheme": "http",
+            "host": "iot.iris-dataplatform.es",
+            "port": 52773
+          },
+          "username": "_SYSTEM",
+          "description": "IOT Webinar"
+        },
+        "/default": "iot",
+    },
+    "objectscript.conn": {
+      "active": true,
+      "server": "iot",
+      "ns": "WEBINAR"
+    }
+}

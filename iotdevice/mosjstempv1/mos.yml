@@ -1,0 +1,97 @@
+author: Pierre-Yves Duquesnoy <PierreYves.Duquesnoy@gmail.com>
+description: A Mongoose OS app To Read a DHT-11 and Communicate with AWS IOT through MQTT
+name: MOS_JS_Temperature
+version: 1.6
+
+libs_version: ${mos.version}
+modules_version: ${mos.version}
+mongoose_os_version: ${mos.version}
+
+# Optional. List of tags for online search.
+tags:
+  - js
+  - wifi
+  - cloud
+  - mqtt 
+  - aws 
+  - InterSystems 
+  - IRIS 
+
+
+# List of files / directories with C sources. No slashes at the end of dir names.
+sources:
+  - src
+
+# List of dirs. Files from these dirs will be copied to the device filesystem
+filesystem:
+  - fs
+
+# Custom configuration entries, settable via "device configuration"
+# Below is a custom firmware configuration example.
+# Uncomment and modify according to your needs:
+
+# config_schema:
+#  - ["my_app", "o", {title: "My app custom settings"}]
+#  - ["my_app.bool_value", "b", false, {title: "Some boolean value"}]
+#  - ["my_app.string_value", "s", "", {title: "Some string value"}]
+#  - ["my_app.int_value", "i", 123, {title: "Some integer value"}]
+
+# These settings get compiled into the C structure, and can be accessed
+# from the C code this way:
+#
+# printf("Hello from %s!\n", mgos_sys_config_get_device_id());
+#
+# Settings are cool: can be modified remotely without full firmware upgrade!
+#
+# To see all available compiled settings, buid the firmware and open
+# build/gen/mgos_config.h file.
+#
+# Also, in this config_schema section, you can override existing
+# settings that has been created by other libraries. For example, debug log
+# level is 2 by default. For this firmware we can override it to 3:
+#
+# config_schema:
+#  - ["debug.level", 3]
+config_schema:
+  #Out Device Pins, configurable through settings
+  #PYD: Check Pin config in 
+  #https://github.com/cesanta/mongoose-os/blob/master/platforms/esp32/src/esp32_pins.h
+  - ["pin.dht","i", 5 , {title: "GPIO pin for DHT-11 Temp/Humidity Sensor"}]  # WROOM32_PIN_29_GPIO
+  - ["pin.red","i",2  , {title: "GPIO pin for Red Led"}]  #WROOM32_PIN_24_GPIO
+  - ["pin.blue","i",4  , {title: "GPIO pin for Blue Led"}]  # WROOM32_PIN_26_GPIO
+ 
+  #the MQTT EndPoint in my AWS IOT eu-west-1 region
+  - ["mqtt.server","s", "a1tacd7y71f63w-ats.iot.eu-west-1.amazonaws.com:8883", {title:"AWS MQTT Server Endpoint in eu-west1"}]
+  #Added 
+  - ["shadow.ota_enable", "b", true, {title: "Enable OTA via shadow"}]
+  - ["shadow.autocommit", "b", false, {title: "Autocommit OTA if the shadow connection is successful"}]
+ 
+
+
+libs:
+  - origin: https://github.com/mongoose-os-libs/boards
+  - origin: https://github.com/mongoose-os-libs/ca-bundle
+  - origin: https://github.com/mongoose-os-libs/rpc-service-config
+  - origin: https://github.com/mongoose-os-libs/rpc-service-fs
+  - origin: https://github.com/mongoose-os-libs/rpc-uart
+  #PYD: Support for Licensing and OTA
+  - origin: https://github.com/mongoose-os-libs/rpc-service-ota
+  #PYD: Added Support for DHT-112
+  - origin: https://github.com/mongoose-os-libs/dht
+  #PYD: Written in JavaScript, need mjs
+  - origin: https://github.com/mongoose-os-libs/mjs
+  #PYD: Initial Wifi Setup via Web Server on 192.169.4.1:
+  - origin: https://github.com/mongoose-os-libs/http-server
+  - origin: https://github.com/mongoose-os-libs/wifi
+  - origin: https://github.com/mongoose-os-libs/wifi-setup-web-ui
+  #PYD: AWS IOT Functionality
+  #- origin: https://github.com/mongoose-os-libs/net
+  - origin: https://github.com/mongoose-os-libs/aws
+  #PYD: and the AWS OTA Shadow Update
+  - origin: https://github.com/mongoose-os-libs/ota-shadow 
+  #PYD: to allow Provisioning and Factory Reset
+  # - origin: https://github.com/mongoose-os-libs/provision
+  
+
+  # Used by the mos tool to catch mos binaries incompatible with this file format
+manifest_version: 2017-09-29
